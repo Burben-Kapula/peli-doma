@@ -7,49 +7,15 @@
   <style>
     body { margin: 0; overflow: hidden; }
     canvas { display: block; background: #000; }
-      #startBtn, #restartBtn {
-    position: absolute;
-    left: 50%;
-    top: 60%;
-    transform: translate(-50%, -50%);
-    padding: 22px 60px;
-    font-size: 2rem;
-    font-family: 'Arial Black', Arial, sans-serif;
-    background: linear-gradient(90deg, #222 60%, #444 100%);
-    color: #fff;
-    border: 3px solid #fff;
-    border-radius: 18px;
-    box-shadow: 0 0 30px #000a;
-    cursor: pointer;
-    letter-spacing: 2px;
-    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-    z-index: 10;
-  }
-  #startBtn:hover, #restartBtn:hover {
-    background: linear-gradient(90deg, #444 60%, #222 100%);
-    color: #ffe066;
-    box-shadow: 0 0 40px #ffe06688;
-  }
   </style>
 </head>
 <body>
   <canvas id="gameCanvas"></canvas>
-    <button id="startBtn">Start</button>
-<button id="restartBtn" style="display:none;">Restart</button>
 
   <script>
-    let gameStarted = false;
-    let showBlur = true;
-
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    function resizeGame() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    resizeGame();
-    window.addEventListener('resize', resizeGame);
     // Розміри екрану
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -105,18 +71,18 @@ const player = {
     };
 
 const platforms = [
-  { x: 6068, y: bgImage.height - 155, width: 120, height: 150 }, 
-  { x: 5948, y: bgImage.height - 155, width: 46, height: 150 },  
-  { x: 5595, y: bgImage.height - 155, width: 270, height: 150 },
-  { x: 5355, y: bgImage.height - 155, width: 170, height: 150 }, 
-  { x: 5025, y: bgImage.height - 155, width: 260, height: 150 }, 
-  { x: 4909, y: bgImage.height - 155, width: 55, height: 150 },  
-  { x: 4670, y: bgImage.height - 155, width: 180, height: 150 }, 
-  { x: 4400, y: bgImage.height - 155, width: 210, height: 150 }, 
-  { x: 4158, y: bgImage.height - 155, width: 180, height: 150 }, 
-  { x: 4045, y: bgImage.height - 155, width: 60, height: 150 },  
-  { x: 3780, y: bgImage.height - 155, width: 198, height: 150 },
-  { x: 3487, y: bgImage.height - 155, width: 178, height: 150 }, 
+  { x: 6068, y: bgImage.height - 155, width: 120, height: 10 }, 
+  { x: 5948, y: bgImage.height - 155, width: 46, height: 10 },  
+  { x: 5595, y: bgImage.height - 155, width: 270, height: 10 },
+  { x: 5355, y: bgImage.height - 155, width: 170, height: 10 }, 
+  { x: 5025, y: bgImage.height - 155, width: 260, height: 10 }, 
+  { x: 4909, y: bgImage.height - 155, width: 55, height: 10 },  
+  { x: 4670, y: bgImage.height - 155, width: 180, height: 10 }, 
+  { x: 4400, y: bgImage.height - 155, width: 210, height: 10 }, 
+  { x: 4158, y: bgImage.height - 155, width: 180, height: 10 }, 
+  { x: 4045, y: bgImage.height - 155, width: 60, height: 10 },  
+  { x: 3780, y: bgImage.height - 155, width: 198, height: 10 },
+  { x: 3487, y: bgImage.height - 155, width: 178, height: 10 }, 
 
   
   { x: 3225, y: bgImage.height - 155, width: 209, height: 10 }, 
@@ -155,7 +121,7 @@ const platforms = [
     // Невидимі платформи
     function drawPlatforms() {
         for (let platform of platforms) {
-            ctx.fillStyle = 'rgba(0,0,0,0)'; // Прозорий колір платформ, якщо хочеш побачити зроби червоними
+            ctx.fillStyle = 'rgba(0, 0, 0, 0)'; // Прозорий колір платформ, якщо хочеш побачити зроби червоними
             ctx.fillRect(platform.x - cameraX, platform.y, platform.width, platform.height);
         }
     }
@@ -380,24 +346,23 @@ const platforms = [
     }
 
     // Рух гравця по клавішам
-window.addEventListener('keydown', (e) => {
-    if (isDead) return; // Якщо гравець мертвий - ігноруємо введення
-    
-    if (
-        (e.code === 'Space' || e.code === 'KeyW') // Додаємо W для стрибка
-        && player.onGround
-    ) {
-        player.dy = jumpPower;
-    }
-    if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
-        player.dx = -2;
-        player.direction = -1;
-    }
-    if (e.code === 'ArrowRight' || e.code === 'KeyD') {
-        player.dx = 2;
-        player.direction = 1;
-    }
-});
+    window.addEventListener('keydown', (e) => {
+        if (isDead) return; // Якщо гравець мертвий - ігноруємо введення
+        
+        if (
+            (e.code === 'Space' || e.code === 'KeyW') && player.onGround
+        ) {
+            player.dy = jumpPower;
+        }
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+            player.dx = -2;
+            player.direction = -1;
+        }
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+            player.dx = 2;
+            player.direction = 1;
+        }
+    });
 
     window.addEventListener('keyup', (e) => {
         if (isDead) return; // Якщо гравець мертвий - ігноруємо введення
@@ -418,78 +383,8 @@ window.addEventListener('keydown', (e) => {
         createFireflies(200); // тут вибираэш кількість свытлячків 200 або 300 скільки хочеш
     };
 
-    function showStart() {
-        showBlur = true;
-        document.getElementById('startBtn').style.display = 'block';
-        document.getElementById('restartBtn').style.display = 'none';
-    }
-    function showRestart() {
-        document.getElementById('startBtn').style.display = 'none';
-        document.getElementById('restartBtn').style.display = 'block';
-    }
-    function hideButtons() {
-        document.getElementById('startBtn').style.display = 'none';
-        document.getElementById('restartBtn').style.display = 'none';
-    }
-
-    // Почати гру
-    document.getElementById('startBtn').onclick = function() {
-        gameStarted = true;
-        showBlur = false;
-        hideButtons();
-        if (player.framesLoaded === 2 && bgImage.complete) gameLoop();
-    };
-
-    // Рестарт гри
-    document.getElementById('restartBtn').onclick = function() {
-        location.reload();
-    };
-
-    // Модифікуємо gameLoop для старту/рестарту
-    function gameLoop(timestamp) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Завжди малюємо фон (з блюром або без)
-    if (bgImage.complete) {
-        drawBackground();
-    }
-
-    if (!gameStarted) {
-        showStart();
-        return;
-    }
-        if (!gameStarted) {
-            showStart();
-            return;
-        }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (bgImage.complete && player.framesLoaded === 2) {
-            drawBackground();
-            drawPlatforms();
-            drawFireflies();
-            drawPlayerLighting();
-            drawPlayer(timestamp);
-            updatePlayer();
-            drawDeathEffect();
-
-            ctx.fillStyle = 'white';
-            ctx.font = '20px sans-serif';
-            ctx.textAlign = 'center';
-
-            // ...тексти...
-
-            // Показати restart, якщо гравець мертвий
-            if (isDead) showRestart();
-        }
-
-        if (!isDead) requestAnimationFrame(gameLoop);
-    }
-
-    // При старті показати кнопку старт
-    showStart();
 
 
   </script>
 </body>
-</html>
+</html>ф
